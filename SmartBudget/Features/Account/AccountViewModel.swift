@@ -9,15 +9,56 @@ import Foundation
 
 
 class AccountViewModel {
-    weak var delegete: AccountViewModelDelegate?
+    weak var delegate: AccountViewModelDelegate?
     
-    func saveSalary(salary: Int, currency: Currency) async throws {
-        do{
-            self.delegete?.handleViewModelOutput(.setLoading(true))
-            try await UserManager.shared.setSalary(salary: salary, currency: currency)
-            self.delegete?.handleViewModelOutput(.setLoading(false))
-        } catch {
-            self.delegete?.handleViewModelOutput(.showError(error as! SBError))
+    private let budgetManager: BudgetManager
+    private let userManager: UserManager
+    
+    init(budgetManager: BudgetManager = .shared, userManager: UserManager = .shared) {
+        self.budgetManager = budgetManager
+        self.userManager = userManager
+    }
+    
+    var currencies: [Currency] {
+        return Currency.allCases
+    }
+    
+    func saveBudget(amount: Double, currency: Currency, startDate: Date, endDate: Date) {
+        guard let userId = userManager.getUserId() else {
+            delegate?.handleViewModelOutput(.showError(.apiUsageError))
+            return
         }
+        
+        let newBudget = Budget(
+            id: UUID().uuidString,
+            userId: userId,
+            amount: amount,
+            currency: currency.rawValue,
+            startDate: startDate,
+            endDate: endDate
+        )
+        
+        Task {
+            do {
+                try await budgetManager.saveBudget(newBudget)
+                await MainActor.run {
+                    delegate?.handleViewModelOutput(.didSaveBudget(true))
+                }
+            } catch {
+                await MainActor.run {
+                    delegate?.handleViewModelOutput(.didSaveBudget(false))
+                }
+            }
+        }
+    }
+    
+    func validateInput(amount: String?, currency: Currency?, startDate: Date, endDate: Date) -> Bool {
+        guard let amount = amount, !amount.isEmpty,
+              let _ = Double(amount),
+              let _ = currency else {
+            return false
+        }
+        
+        return startDate <= endDate
     }
 }

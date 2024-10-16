@@ -5,161 +5,106 @@
 //  Created by Metehan Gürgentepe on 4.04.2024.
 //
 
+
 import UIKit
+import SnapKit
 
 class CardCell: UITableViewCell {
     static let identifier = "CardCell"
     
-    let image = UIImageView()
+    private let iconContainer: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 20
+        view.clipsToBounds = true
+        return view
+    }()
     
-    let imageContainer = UIView()
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .white
+        return imageView
+    }()
     
-    let nameLabel : UILabel = {
+    private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline).withSize(22)
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
         label.textColor = .label
         return label
     }()
     
-    let priceLabel: UILabel = {
+    private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
+        label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .label
+        label.textAlignment = .right
         return label
     }()
     
+    private let noteLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14)
+        label.textColor = .secondaryLabel
+        label.numberOfLines = 2
+        return label
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        configure()
+        setupViews()
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    func set(expense: Expense, color: UIColor) {
-       
-        image.image = UIImage(systemName: expense.iconForTitle(expense.title)?.rawValue ?? "")
-        image.tintColor = color
+    private func setupViews() {
+        contentView.addSubview(iconContainer)
+        iconContainer.addSubview(iconImageView)
+        contentView.addSubview(nameLabel)
+        contentView.addSubview(priceLabel)
+        contentView.addSubview(noteLabel)
         
-        imageContainer.backgroundColor = color.withAlphaComponent(0.2)
-        imageContainer.layer.cornerRadius = 10
-        imageContainer.clipsToBounds = true
-        
-        nameLabel.text = expense.title.rawValue
-        
-        for subview in contentView.subviews {
-            if subview.tag == 100 {
-                subview.removeFromSuperview()
-            }
+        iconContainer.snp.makeConstraints { make in
+            make.left.top.equalToSuperview().offset(16)
+            make.width.height.equalTo(40)
         }
         
-        var previousView: UIView = imageContainer
-//        print("expense: \(expense)")
-        
-        for expenseDetail in expense.expensesDetail {
-            let expenseNameLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .headline).withSize(19)
-                return label
-            }()
-            let expensePriceLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .headline).withSize(19)
-                return label
-            }()
-            let expenseLeftPriceLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .caption1)
-                label.textColor = .systemGray3
-                label.textAlignment = .right
-                return label
-            }()
-            let progressView = UIProgressView()
-            
-            let expenseRatio1: Float = Float(expenseDetail.leftPrice) / Float(expenseDetail.totalPrice)
-            progressView.setProgress(expenseRatio1, animated: true)
-            progressView.tintColor = color
-            
-            expenseNameLabel.text = expenseDetail.name
-            expensePriceLabel.text = String(expenseDetail.totalPrice)
-            expenseLeftPriceLabel.text = "Left \(expenseDetail.leftPrice)"
-            
-            
-            contentView.addSubview(expenseNameLabel)
-            contentView.addSubview(expensePriceLabel)
-            contentView.addSubview(expenseLeftPriceLabel)
-            contentView.addSubview(progressView)
-            
-            expenseNameLabel.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(10)
-                make.top.equalTo(previousView.snp.bottom).offset(20)
-                make.height.equalTo(20)
-                make.width.equalTo(250)
-            }
-            
-            expensePriceLabel.snp.makeConstraints { make in
-                make.top.equalTo(previousView.snp.bottom).offset(20)
-                make.trailing.equalToSuperview().offset(-10)
-                make.height.equalTo(20)
-            }
-            
-            progressView.snp.makeConstraints { make in
-                make.top.equalTo(expenseNameLabel.snp.bottom).offset(10)
-                make.height.equalTo(5)
-                make.leading.equalToSuperview().offset(10)
-                make.trailing.equalTo(expenseLeftPriceLabel.snp.leading).offset(-10)
-            }
-            
-            expenseLeftPriceLabel.snp.makeConstraints { make in
-                make.centerY.equalTo(expenseNameLabel.snp.bottom).offset(10)
-                make.trailing.equalToSuperview().offset(-10)
-                make.width.equalTo(60)
-            }
-            
-            previousView = progressView
-        }
-    }
-    
-    
-    private func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10))
-        contentView.layer.borderWidth = 1.0
-        contentView.layer.borderColor = UIColor.systemGray3.cgColor
-        contentView.layer.cornerRadius = 10
-        
-        addSubview(imageContainer)
-        addSubview(nameLabel)
-        imageContainer.addSubview(image)
-        
-        imageContainer.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().offset(10)
-            make.width.equalTo(50)
-            make.height.equalTo(50)
-        }
-        
-        image.snp.makeConstraints { make in
-            make.center.equalTo(imageContainer.snp.center)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
+        iconImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(24)
         }
         
         nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(imageContainer.snp.trailing).offset(10)
-            make.centerY.equalTo(imageContainer.snp.centerY)
-            make.height.equalTo(30)
+            make.left.equalTo(iconContainer.snp.right).offset(12)
+            make.top.equalTo(iconContainer)
+            make.right.equalTo(priceLabel.snp.left).offset(-8)
+        }
+        
+        priceLabel.snp.makeConstraints { make in
+            make.right.equalToSuperview().offset(-16)
+            make.centerY.equalTo(nameLabel)
+            make.width.lessThanOrEqualTo(100)
+        }
+        
+        noteLabel.snp.makeConstraints { make in
+            make.left.equalTo(nameLabel)
+            make.top.equalTo(nameLabel.snp.bottom).offset(4)
+            make.right.equalTo(priceLabel)
+            make.bottom.lessThanOrEqualToSuperview().offset(-16)
         }
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    func configure(with expense: Expense) {
+        nameLabel.text = expense.category.name
+        priceLabel.text = "\(expense.price)"
+        noteLabel.text = expense.note
+        
+        iconImageView.image = UIImage(systemName: expense.category.icon)
+        
+//        if let color = UIColor(named: expense.category.colorName) {
+//            iconContainer.backgroundColor = color.withAlphaComponent(0.2)
+//            iconImageView.tintColor = color
+//        }
     }
 }

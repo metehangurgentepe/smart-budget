@@ -35,7 +35,6 @@ class ExpenseDetailVC: DataLoadingVC, ExpenseDetailCellDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -76,6 +75,10 @@ class ExpenseDetailVC: DataLoadingVC, ExpenseDetailCellDelegate {
         }
     }
     
+    func updateExpense(price: Int, note: String?, indexPath: IndexPath) {
+        
+    }
+    
     
     @objc func tappedSaveButton() {
         viewModel?.delegate?.handleViewModelOutput(.saveExpense)
@@ -83,10 +86,10 @@ class ExpenseDetailVC: DataLoadingVC, ExpenseDetailCellDelegate {
     
     
     func saveTextFields(leftPrice: Int, totalPrice: Int, indexPath: IndexPath) {
-        var updatedDetail = expense?.expensesDetail[indexPath.row]
-        updatedDetail?.leftPrice = leftPrice
-        updatedDetail?.totalPrice = totalPrice
-        expense?.expensesDetail[indexPath.row] = updatedDetail!
+//        var updatedDetail = expense?.expensesDetail[indexPath.row]
+//        updatedDetail?.leftPrice = leftPrice
+//        updatedDetail?.totalPrice = totalPrice
+//        expense?.expensesDetail[indexPath.row] = updatedDetail!
     }
     
 }
@@ -98,11 +101,6 @@ extension ExpenseDetailVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ExpenseDetailCell.identifier, for: indexPath) as! ExpenseDetailCell
-        if let detail = expense?.expensesDetail[indexPath.row] {
-            cell.configure(expenseDetail: detail)
-            cell.delegate = self
-            cell.indexPath = indexPath
-        }
         return cell
     }
 }
@@ -123,8 +121,7 @@ extension ExpenseDetailVC: ExpenseDetailViewDelegate {
         case .getExpense(let expense):
             DispatchQueue.main.async{
                 self.expense = expense
-                self.title = expense.title.rawValue
-                self.count = expense.expensesDetail.count
+                self.title = expense.categoryFieldName
                 self.tableView.reloadData()
             }
             
@@ -132,7 +129,7 @@ extension ExpenseDetailVC: ExpenseDetailViewDelegate {
             guard !isUpdatingExpense else { return }
             isUpdatingExpense = true
             do {
-                try viewModel?.updateExpense(details: expense!.expensesDetail, id: expense!.id)
+                try viewModel?.updateExpense(id: expense!.id)
             } catch {
                 
             }

@@ -12,21 +12,20 @@ import FirebaseFirestore
 import FirebaseFunctions
 import FirebaseStorage
 
-class ExpenseManager{
+class ExpenseManager {
     static let shared = ExpenseManager()
     private let expensesCollection = Firestore.firestore().collection("expenses")
     
-    private init(){}
+    private init() {}
     
-    func getExpense(id:String) async throws -> Expense {
+    func getExpense(id: String) async throws -> Expense {
         try await expensesCollection.document(id).getDocument(as: Expense.self)
     }
     
-    
     func getAllExpensesByUser() async throws -> [Expense] {
-        do{
+        do {
             let userId = KeychainManager.get(account: "account")
-            let documentId = String(decoding:userId ?? Data(), as:UTF8.self)
+            let documentId = String(decoding: userId ?? Data(), as: UTF8.self)
             let expenses: [Expense] = try await expensesCollection
                 .whereField("userId", isEqualTo: documentId)
                 .getDocuments(as: Expense.self)
@@ -37,9 +36,10 @@ class ExpenseManager{
     }
     
     func getAllExpensesByUserByDate(date: String) async throws -> [Expense] {
-        do{
+        do {
             let userId = KeychainManager.get(account: "account")
-            let documentId = String(decoding:userId ?? Data(), as:UTF8.self)
+            let documentId = String(decoding: userId ?? Data(), as: UTF8.self)
+            
             let expenses: [Expense] = try await expensesCollection
                 .whereField("userId", isEqualTo: documentId)
                 .whereField("dateTime", isEqualTo: date)
@@ -50,80 +50,97 @@ class ExpenseManager{
         }
     }
     
-    
-    func addMonthsToDate(date: String, monthsToAdd: Int) -> String? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/yyyy"
-        guard let dateObject = dateFormatter.date(from: date) else {
-            return nil
-        }
-        
-        let calendar = Calendar.current
-        if let futureDate = calendar.date(byAdding: .month, value: monthsToAdd, to: dateObject) {
-            return dateFormatter.string(from: futureDate)
-        } else {
-            return nil
-        }
-    }
-    
-    
-    func saveExpense(title: ExpenseTitle, price: Int, expensesDetail: [ExpenseDetail], date: String, repeatMonth: Int?) async throws {
+    func saveExpense(categoryFieldName: String, category: Category, price: Int, note: String?, date: Date, repeatInterval: RepeatInterval?) async throws {
         guard let userId = fetchUserId() else { throw SBError.invalidResponse }
         let db = Firestore.firestore()
         let collection = db.collection("expenses")
         
-        let existingExpenses = try await collection
-                .whereField("userId", isEqualTo: userId)
-                .whereField("dateTime", isEqualTo: date)
-                .getDocuments()
-                .documents
-                .compactMap { try? $0.data(as: Expense.self) }
-        
-        
-        if let repeatCount = repeatMonth, repeatCount != 0 {
-            try await saveRepeatingExpenses(title: title, price: price, expensesDetail: expensesDetail, baseDate: date, repeatCount: repeatCount, collection: collection, userId: userId)
+        if let repeatInterval = repeatInterval, repeatInterval != .never {
+            try await saveRepeatingExpenses(categoryFieldName: categoryFieldName, category: category, price: price, note: note, baseDate: date, repeatInterval: repeatInterval, collection: collection, userId: userId)
         } else {
-            try await saveSingleExpense(title: title, price: price, expensesDetail: expensesDetail, date: date, collection: collection, userId: userId)
+            try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: price, note: note, date: date, collection: collection, userId: userId)
         }
     }
-    
     
     private func fetchUserId() -> String? {
         guard let userIdData = KeychainManager.get(account: "account") else { return nil }
         return String(decoding: userIdData, as: UTF8.self)
     }
     
-    
-    private func saveRepeatingExpenses(title: ExpenseTitle, price: Int, expensesDetail: [ExpenseDetail], baseDate: String, repeatCount: Int, collection: CollectionReference, userId: String) async throws {
-        for month in 0..<repeatCount {
-            if let newDate = addMonthsToDate(date: baseDate, monthsToAdd: month) {
-                let existingExpense = try await checkIfUserExpenseByType(userId: userId, title: title, date: newDate)
+    private func saveRepeatingExpenses(categoryFieldName: String, category: Category, price: Int, note: String?, baseDate: Date, repeatInterval: RepeatInterval, collection: CollectionReference, userId: String) async throws {
+        let calendar = Calendar.current
+        var currentDate = baseDate
+        
+        for _ in 0..<12 {
+            switch repeatInterval {
+            case .daily:
+                let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
+                let monthEnd = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart)!
+                let daysInMonth = calendar.dateComponents([.day], from: monthStart, to: monthEnd).day! + 1
                 
-                let newId = UUID().uuidString
-                let expense = Expense(id: newId, title: title, price: price, expensesDetail: expensesDetail, userId: userId, dateTime: newDate, repeatMonth: repeatCount)
+                let remainingDays = calendar.dateComponents([.day], from: max(currentDate, monthStart), to: monthEnd).day! + 1
+                let totalMonthlyPrice = price * remainingDays
                 
-                if let existingExpense = existingExpense {
-                    try await updateExistingExpense(existingExpense: existingExpense, newExpense: expense, collection: collection)
+                try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: totalMonthlyPrice, note: note, date: max(currentDate, monthStart), collection: collection, userId: userId)
+                
+                currentDate = calendar.date(byAdding: .month, value: 1, to: monthStart)!
+                
+            case .weekly:
+                let monthStart = calendar.date(from: calendar.dateComponents([.year, .month], from: currentDate))!
+                let monthEnd = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: monthStart)!
+                
+                let remainingWeeks = ceil(Double(calendar.dateComponents([.day], from: max(currentDate, monthStart), to: monthEnd).day! + 1) / 7.0)
+                let totalMonthlyPrice = Int(Double(price) * remainingWeeks)
+                
+                try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: totalMonthlyPrice, note: note, date: max(currentDate, monthStart), collection: collection, userId: userId)
+                
+                currentDate = calendar.date(byAdding: .month, value: 1, to: monthStart)!
+                
+            case .monthly:
+                try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: price, note: note, date: currentDate, collection: collection, userId: userId)
+                currentDate = calendar.date(byAdding: .month, value: 1, to: currentDate)!
+                
+            case .yearly:
+                if calendar.component(.month, from: currentDate) == calendar.component(.month, from: baseDate) {
+                    try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: price, note: note, date: currentDate, collection: collection, userId: userId)
                 } else {
-                    try await saveExpenseToFirestore(expense: expense, collection: collection)
+                    try await saveSingleExpense(categoryFieldName: categoryFieldName, category: category, price: 0, note: note, date: currentDate, collection: collection, userId: userId)
                 }
+                currentDate = calendar.date(byAdding: .month, value: 1, to: currentDate)!
+                
+            case .never:
+                break
             }
         }
     }
     
-    
-    private func saveSingleExpense(title: ExpenseTitle, price: Int, expensesDetail: [ExpenseDetail], date: String, collection: CollectionReference, userId: String) async throws {
-        let id = UUID().uuidString
-        let expense = Expense(id: id, title: title, price: price, expensesDetail: expensesDetail, userId: userId, dateTime: date)
-        let existingExpense = try await checkIfUserExpenseByType(userId: userId, title: title, date: date)
+    private func saveSingleExpense(categoryFieldName: String, category: Category, price: Int, note: String?, date: Date, collection: CollectionReference, userId: String) async throws {
+        let formattedDate = date.formatToMonthYear()
         
-        if let existingExpense = existingExpense {
-            try await updateExistingExpense(existingExpense: existingExpense, newExpense: expense, collection: collection)
+        if let existingExpense = try await checkIfUserExpenseExists(userId: userId, categoryFieldName: categoryFieldName, category: category, date: date) {
+            let updatedPrice = existingExpense.price + price
+            let updatedNote = combineNotes(existing: existingExpense.note, new: note)
+            
+            try await updateExpense(id: existingExpense.id, price: updatedPrice, note: updatedNote, date: date)
         } else {
+            let id = UUID().uuidString
+            let expense = Expense(id: id, categoryFieldName: categoryFieldName, category: category, price: price, note: note, userId: userId, dateTime: formattedDate, repeatInterval: .never)
             try await saveExpenseToFirestore(expense: expense, collection: collection)
         }
     }
     
+    private func combineNotes(existing: String?, new: String?) -> String? {
+        switch (existing, new) {
+        case (nil, nil):
+            return nil
+        case (let existing?, nil):
+            return existing
+        case (nil, let new?):
+            return new
+        case (let existing?, let new?):
+            return "\(existing), \(new)"
+        }
+    }
     
     private func saveExpenseToFirestore(expense: Expense, collection: CollectionReference) async throws {
         do {
@@ -134,29 +151,7 @@ class ExpenseManager{
         }
     }
     
-    
-    private func updateExistingExpense(existingExpense: Expense, newExpense: Expense, collection: CollectionReference) async throws {
-        var combinedDetails = existingExpense.expensesDetail
-        combinedDetails.append(contentsOf: newExpense.expensesDetail)
-        
-        var expenseDetailData: [[String: Any]] = []
-        for detail in combinedDetails {
-            expenseDetailData.append([
-                "name": detail.name,
-                "totalPrice": detail.totalPrice,
-                "leftPrice": detail.leftPrice
-            ])
-        }
-        
-        let updatedPrice = existingExpense.price + newExpense.price
-        try await collection.document(existingExpense.id).updateData([
-            "price": updatedPrice,
-            "expensesDetail": expenseDetailData
-        ])
-    }
-    
-    
-    func updateExpenseDetail(details: [ExpenseDetail], id: String) async throws{
+    func updateExpense(id: String, price: Int, note: String?, date: Date?) async throws {
         let expenseQuery = expensesCollection.whereField("id", isEqualTo: id)
         let expenseSnapshot = try await expenseQuery.getDocuments()
         
@@ -164,49 +159,36 @@ class ExpenseManager{
             throw SBError.invalidResponse
         }
         
-        var expenseDetail: [[String:Any]] = []
-        
-        for detail in details {
-            let detailData: [String: Any] = [
-                "name": detail.name,
-                "totalPrice": detail.totalPrice,
-                "leftPrice": detail.leftPrice
-            ]
-            expenseDetail.append(detailData)
+        var updateData: [String: Any] = [:]
+        updateData["price"] = price
+        if let note = note {
+            updateData["note"] = note
         }
         
-        try await expenseDocument.reference.updateData(["expensesDetail": expenseDetail])
+        if let date = date {
+            updateData["dateTime"] = date
+        }
+    
+        try await expenseDocument.reference.updateData(updateData)
     }
     
-    
-    func deleteExpense(id: String) async throws{
+    func deleteExpense(id: String) async throws {
         try await expensesCollection.document(id).delete()
     }
     
-    
-    func deleteExpenseDetail(id: String, detail: ExpenseDetail) async throws{
-        let document = try await expensesCollection.whereField("id", isEqualTo: id).getDocuments().documents.first
-        
-        var updatedDetails = document?.data()["expensesDetail"] as? [ExpenseDetail] ?? []
-        updatedDetails.removeAll { $0 == detail }
-        
-        try await document?.reference.updateData(["expensesDetail" : updatedDetails])
-    }
-    
-    
-    func checkIfUserExpenseByType(userId: String, title: ExpenseTitle, date:String) async throws -> Expense? {
-        
-        return try await expensesCollection.whereField("userId", isEqualTo: userId)
-            .whereField("dateTime", isEqualTo: date)
-            .whereField("title", isEqualTo: title.rawValue)
+    func checkIfUserExpenseExists(userId: String, categoryFieldName: String, category: Category, date: Date) async throws -> Expense? {
+        return try await expensesCollection
+            .whereField("userId", isEqualTo: userId)
+            .whereField("dateTime", isEqualTo: date.formatToMonthYear())
+            .whereField("categoryFieldName", isEqualTo: categoryFieldName)
+            .whereField("category.codingKey", isEqualTo: category.codingKey)
             .getDocuments(as: Expense.self)
             .first
     }
 }
 
-
 extension Query {
-    func getDocuments<T>(as type:T.Type) async throws -> [T] where T: Decodable {
+    func getDocuments<T>(as type: T.Type) async throws -> [T] where T: Decodable {
         let snapshot = try await self.getDocuments()
         return try snapshot.documents.map { document in
             return try document.data(as: T.self)

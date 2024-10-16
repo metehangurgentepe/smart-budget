@@ -23,6 +23,11 @@ class UserManager{
         return try await userCollection.document(documentId).getDocument(as: User.self)
     }
     
+    func getUserId() -> String?{
+        let userId = KeychainManager.get(account: "account")
+        return String(decoding:userId ?? Data(), as:UTF8.self)
+    }
+    
     
     func createUser() async throws {
         let userId = KeychainManager.get(account: "account")

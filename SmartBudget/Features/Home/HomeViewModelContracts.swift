@@ -27,6 +27,7 @@ enum ExpenseListViewModelOutput: Equatable {
     case emptyList
     case reloadCollectionView([Expense])
     case showUser(User?)
+    case getBudget(Budget)
 }
 
 protocol HomeViewModelProtocol {

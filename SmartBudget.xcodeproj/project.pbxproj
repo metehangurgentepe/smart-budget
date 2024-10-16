@@ -29,7 +29,6 @@
 		660E68FA2BBEA98A00210BC0 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660E68F92BBEA98A00210BC0 /* Images.swift */; };
 		660E68FC2BBEA9C300210BC0 /* LocaleKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660E68FB2BBEA9C300210BC0 /* LocaleKeys.swift */; };
 		660E68FF2BBEAA7300210BC0 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 660E68FE2BBEAA7300210BC0 /* SettingsVC.swift */; };
-		6616A2A12BBECE3D005B67CA /* AddExpenseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6616A2A02BBECE3D005B67CA /* AddExpenseVC.swift */; };
 		6616A2A32BBED089005B67CA /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6616A2A22BBED089005B67CA /* User.swift */; };
 		6616A2A52BBED292005B67CA /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6616A2A42BBED292005B67CA /* UserManager.swift */; };
 		6616A2A72BBED298005B67CA /* ExpenseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6616A2A62BBED298005B67CA /* ExpenseManager.swift */; };
@@ -42,6 +41,11 @@
 		6618C0FD2BD6402C00042C7A /* ExpenseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6618C0FC2BD6402C00042C7A /* ExpenseCell.swift */; };
 		6618E2892BB3FD13003861D1 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6618E2882BB3FD13003861D1 /* HomeViewModel.swift */; };
 		6618E28B2BB3FD1B003861D1 /* HomeViewModelContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6618E28A2BB3FD1B003861D1 /* HomeViewModelContracts.swift */; };
+		66229E462CBA980B00C98E3C /* AddExpenseVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66229E452CBA980B00C98E3C /* AddExpenseVC.swift */; };
+		66229E482CBA995100C98E3C /* ExpenseTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66229E472CBA995100C98E3C /* ExpenseTableViewCell.swift */; };
+		66229E4E2CBD232D00C98E3C /* SelectCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66229E4D2CBD232D00C98E3C /* SelectCategory.swift */; };
+		66229E552CBD36BF00C98E3C /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66229E542CBD36BF00C98E3C /* Category.swift */; };
+		66229E582CBD3DB900C98E3C /* ExpenseNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66229E572CBD3DB900C98E3C /* ExpenseNoteCell.swift */; };
 		6636B1312BD90FE200706691 /* ExpenseDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6636B1302BD90FE200706691 /* ExpenseDetailCell.swift */; };
 		6636DED72BF38F3C00486921 /* AccumulateViewModelContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6636DED62BF38F3C00486921 /* AccumulateViewModelContracts.swift */; };
 		6636DED92BF3A80F00486921 /* AddAccumulateViewModelContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6636DED82BF3A80F00486921 /* AddAccumulateViewModelContracts.swift */; };
@@ -79,6 +83,13 @@
 		665C6F3F2BCD04A3000E5E59 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C6F3E2BCD04A3000E5E59 /* SplashVC.swift */; };
 		665C6F412BCD04DE000E5E59 /* SplashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 665C6F402BCD04DE000E5E59 /* SplashViewModel.swift */; };
 		66887FF22BBFF58500D9CC0C /* UserInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66887FF12BBFF58500D9CC0C /* UserInfoVC.swift */; };
+		668ECE8A2CBEDCC40055179C /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE892CBEDCC40055179C /* BottomSheetViewController.swift */; };
+		668ECE8D2CBF19720055179C /* CategoryExpensesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE8C2CBF19720055179C /* CategoryExpensesVC.swift */; };
+		668ECE922CBFC1A90055179C /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE912CBFC1A90055179C /* String+Ext.swift */; };
+		668ECE942CBFD2A20055179C /* Budget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE932CBFD2A20055179C /* Budget.swift */; };
+		668ECE962CBFD2B00055179C /* BudgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE952CBFD2B00055179C /* BudgetManager.swift */; };
+		668ECE982CBFD8D70055179C /* SaveButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE972CBFD8D70055179C /* SaveButton.swift */; };
+		668ECE9A2CBFE63F0055179C /* CurrencyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668ECE992CBFE63F0055179C /* CurrencyManager.swift */; };
 		669256A82C3429C700E4DA67 /* AccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669256A72C3429C700E4DA67 /* AccountVC.swift */; };
 		669256AA2C3429CE00E4DA67 /* AccountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669256A92C3429CE00E4DA67 /* AccountViewModel.swift */; };
 		669256AC2C3429E500E4DA67 /* AccountViewModelContracts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669256AB2C3429E500E4DA67 /* AccountViewModelContracts.swift */; };
@@ -124,7 +135,6 @@
 		660E68F92BBEA98A00210BC0 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		660E68FB2BBEA9C300210BC0 /* LocaleKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocaleKeys.swift; sourceTree = "<group>"; };
 		660E68FE2BBEAA7300210BC0 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
-		6616A2A02BBECE3D005B67CA /* AddExpenseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseVC.swift; sourceTree = "<group>"; };
 		6616A2A22BBED089005B67CA /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		6616A2A42BBED292005B67CA /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		6616A2A62BBED298005B67CA /* ExpenseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseManager.swift; sourceTree = "<group>"; };
@@ -137,6 +147,11 @@
 		6618C0FC2BD6402C00042C7A /* ExpenseCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseCell.swift; sourceTree = "<group>"; };
 		6618E2882BB3FD13003861D1 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		6618E28A2BB3FD1B003861D1 /* HomeViewModelContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModelContracts.swift; sourceTree = "<group>"; };
+		66229E452CBA980B00C98E3C /* AddExpenseVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddExpenseVC.swift; sourceTree = "<group>"; };
+		66229E472CBA995100C98E3C /* ExpenseTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseTableViewCell.swift; sourceTree = "<group>"; };
+		66229E4D2CBD232D00C98E3C /* SelectCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCategory.swift; sourceTree = "<group>"; };
+		66229E542CBD36BF00C98E3C /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		66229E572CBD3DB900C98E3C /* ExpenseNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseNoteCell.swift; sourceTree = "<group>"; };
 		6636B1302BD90FE200706691 /* ExpenseDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpenseDetailCell.swift; sourceTree = "<group>"; };
 		6636DED62BF38F3C00486921 /* AccumulateViewModelContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccumulateViewModelContracts.swift; sourceTree = "<group>"; };
 		6636DED82BF3A80F00486921 /* AddAccumulateViewModelContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccumulateViewModelContracts.swift; sourceTree = "<group>"; };
@@ -146,6 +161,13 @@
 		665C6F3E2BCD04A3000E5E59 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		665C6F402BCD04DE000E5E59 /* SplashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewModel.swift; sourceTree = "<group>"; };
 		66887FF12BBFF58500D9CC0C /* UserInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoVC.swift; sourceTree = "<group>"; };
+		668ECE892CBEDCC40055179C /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
+		668ECE8C2CBF19720055179C /* CategoryExpensesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryExpensesVC.swift; sourceTree = "<group>"; };
+		668ECE912CBFC1A90055179C /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		668ECE932CBFD2A20055179C /* Budget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Budget.swift; sourceTree = "<group>"; };
+		668ECE952CBFD2B00055179C /* BudgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BudgetManager.swift; sourceTree = "<group>"; };
+		668ECE972CBFD8D70055179C /* SaveButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveButton.swift; sourceTree = "<group>"; };
+		668ECE992CBFE63F0055179C /* CurrencyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyManager.swift; sourceTree = "<group>"; };
 		669256A72C3429C700E4DA67 /* AccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountVC.swift; sourceTree = "<group>"; };
 		669256A92C3429CE00E4DA67 /* AccountViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModel.swift; sourceTree = "<group>"; };
 		669256AB2C3429E500E4DA67 /* AccountViewModelContracts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewModelContracts.swift; sourceTree = "<group>"; };
@@ -168,6 +190,9 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		66229E422CB956A500C98E3C /* Cell */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cell; sourceTree = "<group>"; };
+		66229E492CBD194100C98E3C /* TextField */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = TextField; sourceTree = "<group>"; };
+		66229E4F2CBD265200C98E3C /* Cell */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cell; sourceTree = "<group>"; };
+		668ECE8E2CBFAF410055179C /* cell */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = cell; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -266,11 +291,13 @@
 		660C146F2B9CC77D004622D2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				668ECE8B2CBF19630055179C /* CategoryExpenses */,
 				669256A62C3429AC00E4DA67 /* Account */,
 				660887D92BF2457300297F5D /* AddAccumulate */,
 				665C6F422BCD2051000E5E59 /* Accumulate */,
 				665C6F3B2BCD03B6000E5E59 /* Splash */,
 				66887FEE2BBFF56600D9CC0C /* UserInfo */,
+				66229E4C2CBD230F00C98E3C /* SelectCategory */,
 				6616A2AA2BBED34A005B67CA /* ExpenseDetail */,
 				6616A29F2BBECE26005B67CA /* AddExpense */,
 				660E68FD2BBEAA6300210BC0 /* Settings */,
@@ -302,9 +329,10 @@
 		6616A29F2BBECE26005B67CA /* AddExpense */ = {
 			isa = PBXGroup;
 			children = (
-				6616A2A02BBECE3D005B67CA /* AddExpenseVC.swift */,
+				66229E562CBD3DA100C98E3C /* Cell */,
 				6616A2B12BBEEB24005B67CA /* AddExpenseViewModel.swift */,
 				66D5357E2BC028FA000782DD /* AddExpenseViewModelContracts.swift */,
+				66229E452CBA980B00C98E3C /* AddExpenseVC.swift */,
 			);
 			path = AddExpense;
 			sourceTree = "<group>";
@@ -330,9 +358,29 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		66229E4C2CBD230F00C98E3C /* SelectCategory */ = {
+			isa = PBXGroup;
+			children = (
+				66229E542CBD36BF00C98E3C /* Category.swift */,
+				66229E4F2CBD265200C98E3C /* Cell */,
+				66229E4D2CBD232D00C98E3C /* SelectCategory.swift */,
+			);
+			path = SelectCategory;
+			sourceTree = "<group>";
+		};
+		66229E562CBD3DA100C98E3C /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				66229E472CBA995100C98E3C /* ExpenseTableViewCell.swift */,
+				66229E572CBD3DB900C98E3C /* ExpenseNoteCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
 		66460F1C2BB6CBD2006C4815 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				66229E492CBD194100C98E3C /* TextField */,
 				66460F262BB6CD44006C4815 /* Buttons */,
 				66460F252BB6CD3D006C4815 /* Cells */,
 				66460F242BB6CD39006C4815 /* Labels */,
@@ -360,6 +408,8 @@
 				6616A2A62BBED298005B67CA /* ExpenseManager.swift */,
 				6616A2AD2BBED95A005B67CA /* KeychainManager.swift */,
 				660887E42BF250E200297F5D /* AccumulateManager.swift */,
+				668ECE952CBFD2B00055179C /* BudgetManager.swift */,
+				668ECE992CBFE63F0055179C /* CurrencyManager.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -370,6 +420,7 @@
 				6616A2A22BBED089005B67CA /* User.swift */,
 				6601FC2F2BBDA21A00F60E05 /* Expense.swift */,
 				660887E22BF24CC300297F5D /* Accumulate.swift */,
+				668ECE932CBFD2A20055179C /* Budget.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -392,6 +443,7 @@
 				66D5357C2BC01D21000782DD /* UIColor+Ext.swift */,
 				66BC51152BC3CF23000EDEC1 /* UIViewController+Ext.swift */,
 				66E1E2732BCEA7C6005376A5 /* Calendar+Ext.swift */,
+				668ECE912CBFC1A90055179C /* String+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -412,6 +464,7 @@
 			children = (
 				66D5356A2BC01BCA000782DD /* AlertVC.swift */,
 				66D535762BC01C9F000782DD /* DataLoadingVC.swift */,
+				668ECE892CBEDCC40055179C /* BottomSheetViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -441,6 +494,7 @@
 			isa = PBXGroup;
 			children = (
 				66D535782BC01CC1000782DD /* CustomButton.swift */,
+				668ECE972CBFD8D70055179C /* SaveButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -486,6 +540,15 @@
 			path = UserInfo;
 			sourceTree = "<group>";
 		};
+		668ECE8B2CBF19630055179C /* CategoryExpenses */ = {
+			isa = PBXGroup;
+			children = (
+				668ECE8E2CBFAF410055179C /* cell */,
+				668ECE8C2CBF19720055179C /* CategoryExpensesVC.swift */,
+			);
+			path = CategoryExpenses;
+			sourceTree = "<group>";
+		};
 		669256A62C3429AC00E4DA67 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +576,9 @@
 			);
 			fileSystemSynchronizedGroups = (
 				66229E422CB956A500C98E3C /* Cell */,
+				66229E492CBD194100C98E3C /* TextField */,
+				66229E4F2CBD265200C98E3C /* Cell */,
+				668ECE8E2CBFAF410055179C /* cell */,
 			);
 			name = SmartBudget;
 			packageProductDependencies = (
@@ -608,15 +674,20 @@
 				66E1E2762BCEAEB7005376A5 /* MonthPickerView.swift in Sources */,
 				6636DED92BF3A80F00486921 /* AddAccumulateViewModelContracts.swift in Sources */,
 				660887D62BF207E700297F5D /* Coordinator.swift in Sources */,
+				668ECE962CBFD2B00055179C /* BudgetManager.swift in Sources */,
 				6601FC2E2BBD963C00F60E05 /* Date+Ext.swift in Sources */,
 				6616A2B22BBEEB24005B67CA /* AddExpenseViewModel.swift in Sources */,
 				660E68FA2BBEA98A00210BC0 /* Images.swift in Sources */,
 				66D535732BC01C4D000782DD /* AlertContainerView.swift in Sources */,
 				66D535712BC01C27000782DD /* SecondaryTitleLabel.swift in Sources */,
 				66D5356B2BC01BCA000782DD /* AlertVC.swift in Sources */,
+				66229E482CBA995100C98E3C /* ExpenseTableViewCell.swift in Sources */,
 				660C145F2B9CC717004622D2 /* HomeVC.swift in Sources */,
 				669256AC2C3429E500E4DA67 /* AccountViewModelContracts.swift in Sources */,
+				66229E4E2CBD232D00C98E3C /* SelectCategory.swift in Sources */,
 				665C6F3F2BCD04A3000E5E59 /* SplashVC.swift in Sources */,
+				668ECE8D2CBF19720055179C /* CategoryExpensesVC.swift in Sources */,
+				66229E462CBA980B00C98E3C /* AddExpenseVC.swift in Sources */,
 				660887E52BF250E200297F5D /* AccumulateManager.swift in Sources */,
 				66D5357D2BC01D21000782DD /* UIColor+Ext.swift in Sources */,
 				66887FF22BBFF58500D9CC0C /* UserInfoVC.swift in Sources */,
@@ -624,6 +695,7 @@
 				6616A2B02BBED9C0005B67CA /* SBError.swift in Sources */,
 				6616A2A72BBED298005B67CA /* ExpenseManager.swift in Sources */,
 				6616A2A32BBED089005B67CA /* User.swift in Sources */,
+				668ECE982CBFD8D70055179C /* SaveButton.swift in Sources */,
 				660887DD2BF245D500297F5D /* AccumulateCell.swift in Sources */,
 				665C6F412BCD04DE000E5E59 /* SplashViewModel.swift in Sources */,
 				660C145D2B9CC717004622D2 /* SceneDelegate.swift in Sources */,
@@ -637,16 +709,19 @@
 				660E68F52BBE79FD00210BC0 /* CardCell.swift in Sources */,
 				660E68F82BBEA95300210BC0 /* TabBarVC.swift in Sources */,
 				66E1E2742BCEA7C6005376A5 /* Calendar+Ext.swift in Sources */,
+				668ECE8A2CBEDCC40055179C /* BottomSheetViewController.swift in Sources */,
+				668ECE922CBFC1A90055179C /* String+Ext.swift in Sources */,
 				66D5356D2BC01BF7000782DD /* BodyLabel.swift in Sources */,
 				669256A82C3429C700E4DA67 /* AccountVC.swift in Sources */,
 				6618E2892BB3FD13003861D1 /* HomeViewModel.swift in Sources */,
+				66229E552CBD36BF00C98E3C /* Category.swift in Sources */,
 				660887D42BF2077A00297F5D /* Constants.swift in Sources */,
 				660887E12BF2489D00297F5D /* AddAccumulateViewModel.swift in Sources */,
 				660887E32BF24CC300297F5D /* Accumulate.swift in Sources */,
 				66D535752BC01C67000782DD /* EmptyStateView.swift in Sources */,
 				660887D22BF2074000297F5D /* SettingsView.swift in Sources */,
+				668ECE942CBFD2A20055179C /* Budget.swift in Sources */,
 				660E68FC2BBEA9C300210BC0 /* LocaleKeys.swift in Sources */,
-				6616A2A12BBECE3D005B67CA /* AddExpenseVC.swift in Sources */,
 				66460F2A2BB6D122006C4815 /* ExpenseView.swift in Sources */,
 				660E68FF2BBEAA7300210BC0 /* SettingsVC.swift in Sources */,
 				6616A2A52BBED292005B67CA /* UserManager.swift in Sources */,
@@ -654,10 +729,12 @@
 				660887DF2BF2489000297F5D /* AccumulateViewModel.swift in Sources */,
 				66D5356F2BC01C0E000782DD /* TitleLabel.swift in Sources */,
 				66D535792BC01CC1000782DD /* CustomButton.swift in Sources */,
+				668ECE9A2CBFE63F0055179C /* CurrencyManager.swift in Sources */,
 				66D5357F2BC028FA000782DD /* AddExpenseViewModelContracts.swift in Sources */,
 				6618C0FD2BD6402C00042C7A /* ExpenseCell.swift in Sources */,
 				660887D82BF20E8B00297F5D /* AccumulateVC.swift in Sources */,
 				6616A2AE2BBED95A005B67CA /* KeychainManager.swift in Sources */,
+				66229E582CBD3DB900C98E3C /* ExpenseNoteCell.swift in Sources */,
 				66D5357B2BC01CED000782DD /* ThemeColors.swift in Sources */,
 				6636B1312BD90FE200706691 /* ExpenseDetailCell.swift in Sources */,
 				6636DED72BF38F3C00486921 /* AccumulateViewModelContracts.swift in Sources */,

@@ -9,177 +9,220 @@ import UIKit
 
 class ExpenseCell: UICollectionViewCell {
     static let identifier = "ExpenseCell"
-    let image = UIImageView()
     
-    let imageContainer = UIView()
-    
-    let nameLabel : UILabel = {
+    private let categoryNameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline).withSize(22)
-        label.textColor = .label
-        label.numberOfLines = 0
-        label.lineBreakMode = .byTruncatingTail
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
     }()
     
-    let priceLabel: UILabel = {
+    private let iconContainer: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 15
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    private let iconImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .white
+        return imageView
+    }()
+    
+    private let expensesStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        prepareForReuse()
+        setupViews()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        categoryNameLabel.text = nil
+        iconImageView.image = nil
+        iconContainer.backgroundColor = nil
+        
+        expensesStackView.arrangedSubviews.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+    
+    private func setupViews() {
+        contentView.layer.borderColor = UIColor.lightGray.cgColor
+        contentView.layer.borderWidth = 1
+        contentView.layer.cornerRadius = 15
+        
+        contentView.addSubview(categoryNameLabel)
+        contentView.addSubview(iconContainer)
+        iconContainer.addSubview(iconImageView)
+        contentView.addSubview(expensesStackView)
+        
+        categoryNameLabel.snp.makeConstraints { make in
+            make.top.leading.equalToSuperview().offset(16)
+        }
+        
+        iconContainer.snp.makeConstraints { make in
+            make.centerY.equalTo(categoryNameLabel.snp.centerY)
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(30)
+        }
+        
+        iconImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(20)
+        }
+        
+        expensesStackView.snp.makeConstraints { make in
+            make.top.equalTo(categoryNameLabel.snp.bottom).offset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.lessThanOrEqualToSuperview().offset(-16)
+        }
+    }
+    
+    func configure(with categoryField: CategoryField, expenses: [Expense], color: UIColor) {
+        categoryNameLabel.text = categoryField.name
+        
+        iconContainer.backgroundColor = color
+        iconImageView.image = UIImage(systemName: expenses.first?.category.icon ?? "exclamationmark.triangle.fill")
+        iconImageView.tintColor = .white
+        
+        expensesStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        let expensesToShow = expenses.prefix(3)
+        for expense in expensesToShow {
+            let expenseView = ExpenseItemView()
+            expenseView.configure(with: expense)
+            expensesStackView.addArrangedSubview(expenseView)
+        }
+        
+        let totalPrice = expenses.reduce(0) { $0 + $1.price }
+        let totalExpenseView = ExpenseItemView()
+        totalExpenseView.configure(withTotal: totalPrice)
+        
+        if expensesToShow.count < 4 {
+            expensesStackView.addArrangedSubview(totalExpenseView)
+        }
+        
+        let cellHeight = max(100, CGFloat(expensesStackView.arrangedSubviews.count * 30 + 40))
+        self.frame.size.height = cellHeight
+    }
+}
+
+class ExpenseItemView: UIView {
+    private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
-        label.lineBreakMode = .byTruncatingTail
-        label.textColor = .label
-        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     
-    private let detailsContainerView = UIView()
+    private let priceLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 14)
+        label.textAlignment = .right
+        return label
+    }()
+    
+    private let noteLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.textColor = .gray
+        label.numberOfLines = 1
+        return label
+    }()
+    
+    private let dottedLineView: UIView = {
+        let view = UIView()
+        return view
+    }()
+    
+    private let shapeLayer = CAShapeLayer()
     
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configure()
+        setupViews()
     }
     
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configure()
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        image.image = nil
-        nameLabel.text = nil
-        imageContainer.backgroundColor = nil
-        
-        contentView.subviews.forEach { subview in
-            if subview != imageContainer && subview != nameLabel {
-                subview.removeFromSuperview()
-            }
-        }
-    }
-    
-    
-    func set(expense: Expense, color: UIColor) {
-        prepareForReuse()
-        
-        image.image = UIImage(systemName: expense.iconForTitle(expense.title)?.rawValue ?? "")
-        image.tintColor = color
-        
-        imageContainer.backgroundColor = color.withAlphaComponent(0.2)
-        imageContainer.layer.cornerRadius = 10
-        imageContainer.clipsToBounds = true
-        
-        nameLabel.text = expense.title.rawValue
-        
-        for subview in contentView.subviews {
-            if subview.tag == 100 {
-                subview.removeFromSuperview()
-            }
-        }
-        
-        var previousView: UIView = imageContainer
-        
-        for expenseDetail in expense.expensesDetail {
-            let expenseNameLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .headline).withSize(15)
-                return label
-            }()
-            let expensePriceLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .headline).withSize(15)
-                return label
-            }()
-            let expenseLeftPriceLabel: UILabel = {
-                let label = UILabel()
-                label.font = .preferredFont(forTextStyle: .caption1)
-                label.textColor = .systemGray3
-                label.textAlignment = .right
-                return label
-            }()
-            let progressView = UIProgressView()
-            
-            expenseNameLabel.tag = 100
-            progressView.tag = 100
-            expensePriceLabel.tag = 100
-            expenseLeftPriceLabel.tag = 100
-            
-            let expenseRatio1: Float = Float(expenseDetail.leftPrice) / Float(expenseDetail.totalPrice)
-            progressView.setProgress(expenseRatio1, animated: true)
-            progressView.tintColor = color
-            
-            expenseNameLabel.text = expenseDetail.name
-            expensePriceLabel.text = String(expenseDetail.totalPrice)
-            expenseLeftPriceLabel.text = "Left \(expenseDetail.leftPrice)"
-            
-            contentView.addSubview(expenseNameLabel)
-            contentView.addSubview(expensePriceLabel)
-            contentView.addSubview(expenseLeftPriceLabel)
-            contentView.addSubview(progressView)
-            
-            expenseNameLabel.snp.makeConstraints { make in
-                make.leading.equalToSuperview().offset(10)
-                make.top.equalTo(previousView.snp.bottom).offset(20)
-                make.height.equalTo(20)
-                make.width.equalTo(250)
-            }
-            
-            expensePriceLabel.snp.makeConstraints { make in
-                make.top.equalTo(previousView.snp.bottom).offset(20)
-                make.trailing.equalToSuperview().offset(-10)
-                make.height.equalTo(20)
-            }
-            
-            progressView.snp.makeConstraints { make in
-                make.top.equalTo(expenseNameLabel.snp.bottom).offset(10)
-                make.height.equalTo(5)
-                make.leading.equalToSuperview().offset(10)
-                make.trailing.equalTo(expenseLeftPriceLabel.snp.leading).offset(-10)
-            }
-            
-            expenseLeftPriceLabel.snp.makeConstraints { make in
-                make.centerY.equalTo(expenseNameLabel.snp.bottom).offset(10)
-                make.trailing.equalToSuperview().offset(-10)
-                make.width.equalTo(60)
-            }
-            
-            previousView = progressView
-        }
-    }
-    
-    
-    private func configure() {
-        contentView.subviews.forEach { $0.removeFromSuperview() }
-        contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10))
-        contentView.layer.borderWidth = 1.0
-        contentView.layer.borderColor = UIColor.systemGray3.cgColor
-        contentView.layer.cornerRadius = 10
-        
-        addSubview(imageContainer)
+    private func setupViews() {
         addSubview(nameLabel)
-        imageContainer.addSubview(image)
-        
-        imageContainer.snp.makeConstraints { make in
-            make.leading.top.equalToSuperview().offset(10)
-            make.width.equalTo(50)
-            make.height.equalTo(50)
-        }
-        
-        image.snp.makeConstraints { make in
-            make.center.equalTo(imageContainer.snp.center)
-            make.width.equalTo(30)
-            make.height.equalTo(30)
-        }
+        addSubview(priceLabel)
+        addSubview(dottedLineView)
+        addSubview(noteLabel)
         
         nameLabel.snp.makeConstraints { make in
-            make.leading.equalTo(imageContainer.snp.trailing).offset(10)
-            make.centerY.equalTo(imageContainer.snp.centerY)
-            make.height.equalTo(30)
+            make.leading.top.bottom.equalToSuperview()
+            make.width.lessThanOrEqualToSuperview().multipliedBy(0.2)
         }
+        
+        priceLabel.snp.makeConstraints { make in
+            make.trailing.top.bottom.equalToSuperview()
+            make.width.lessThanOrEqualToSuperview().multipliedBy(0.1)
+        }
+        
+        noteLabel.snp.makeConstraints { make in
+            make.leading.equalTo(nameLabel.snp.trailing).offset(3)
+            make.centerY.equalTo(nameLabel.snp.centerY)
+            make.width.lessThanOrEqualToSuperview().multipliedBy(0.2)
+        }
+        
+        dottedLineView.snp.makeConstraints { make in
+            make.leading.equalTo(noteLabel.snp.trailing).offset(8)
+            make.trailing.equalTo(priceLabel.snp.leading).offset(-8)
+            make.centerY.equalTo(nameLabel)
+            make.height.equalTo(1)
+        }
+        
+        setupDottedLine()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    private func setupDottedLine() {
+        shapeLayer.strokeColor = UIColor.lightGray.withAlphaComponent(0.8).cgColor
+        shapeLayer.lineWidth = 1
+        shapeLayer.lineDashPattern = [4, 4]
+        dottedLineView.layer.addSublayer(shapeLayer)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let path = CGMutablePath()
+        path.addLines(between: [CGPoint(x: 0, y: dottedLineView.bounds.height / 2),
+                                CGPoint(x: dottedLineView.bounds.width, y: dottedLineView.bounds.height / 2)])
+        shapeLayer.path = path
+    }
+    
+    func configure(with expense: Expense) {
+        nameLabel.text = expense.category.name
+        priceLabel.text = "\(expense.price)"
+        if let note = expense.note, !note.isEmpty {
+            noteLabel.text = note
+            noteLabel.isHidden = false
+        } else {
+            noteLabel.isHidden = true
+        }
+        setNeedsLayout()
+    }
+    
+    func configure(withTotal total: Int) {
+        nameLabel.text = "Total"
+        nameLabel.font = UIFont.boldSystemFont(ofSize: 14)
+        priceLabel.text = "\(total)"
+        priceLabel.font = UIFont.boldSystemFont(ofSize: 14)
     }
 }

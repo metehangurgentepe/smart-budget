@@ -9,13 +9,14 @@ import Foundation
 
 
 protocol AccountViewModelDelegate: AnyObject {
-    func handleViewModelOutput(_ output: AddAccumulateViewModelOutput)
+    func handleViewModelOutput(_ output: AccountViewModelOutput)
 }
 
 enum AccountViewModelOutput: Equatable {
     case setLoading(Bool)
     case showError(SBError)
     case saveSalary
+    case didSaveBudget(Bool)
 }
 
 protocol AccountViewModelProtocol {

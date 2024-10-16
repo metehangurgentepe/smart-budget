@@ -24,17 +24,17 @@ class ExpenseDetailViewModel {
     }
     
     
-    func updateExpense(details: [ExpenseDetail], id: String) throws {
-        Task {
-            try details.compactMap({ detail in
-                if detail.leftPrice > detail.totalPrice {
-                    self.delegate?.handleViewModelOutput(.showError(.totalPriceMustBeBigger))
-                    throw SBError.totalPriceMustBeBigger
-                }
-            })
-            try await ExpenseManager.shared.updateExpenseDetail(details: details, id: id)
-            self.delegate?.handleViewModelOutput(.saveExpense)
-        }
+    func updateExpense(id: String) throws {
+//        Task {
+//            try details.compactMap({ detail in
+//                if detail.leftPrice > detail.totalPrice {
+//                    self.delegate?.handleViewModelOutput(.showError(.totalPriceMustBeBigger))
+//                    throw SBError.totalPriceMustBeBigger
+//                }
+//            })
+//            try await ExpenseManager.shared.updateExpenseDetail(details: details, id: id)
+//            self.delegate?.handleViewModelOutput(.saveExpense)
+//        }
     }
     
     

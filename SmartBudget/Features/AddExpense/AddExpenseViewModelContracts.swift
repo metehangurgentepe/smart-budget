@@ -10,7 +10,6 @@ import Foundation
 enum AddExpenseViewModelOutput: Equatable {
     case setLoading(Bool)
     case showError(Error)
-    case saveExpense
     case successSavingExpense(Bool)
     
     static func == (lhs: AddExpenseViewModelOutput, rhs: AddExpenseViewModelOutput) -> Bool {

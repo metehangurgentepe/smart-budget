@@ -22,7 +22,6 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
         button.setTitleColor(.label, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.addTarget(self, action: #selector(monthButtonTapped), for: .touchUpInside)
-        button.backgroundColor = .red
         return button
     }()
     
@@ -42,18 +41,13 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
         return button
     }()
     
-    let leftMoneyLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline).withSize(50)
-        label.textColor = .label
-        return label
-    }()
-    
     let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.distribution = .fill
         stackView.layer.cornerRadius = 10
-        stackView.backgroundColor = .gray.withAlphaComponent(0.3)
+        stackView.backgroundColor = .clear
+        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        stackView.layer.borderWidth = 1
         return stackView
     }()
     
@@ -78,7 +72,6 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
     }
     
     private func setupViews() {
-        addSubview(leftMoneyLabel)
         addSubview(expenseView)
         addSubview(stackView)
         
@@ -105,14 +98,8 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
             make.height.equalTo(stackView).multipliedBy(1)
         }
         
-        leftMoneyLabel.snp.makeConstraints { make in
-            make.top.equalTo(stackView.snp.bottom).offset(0)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(70)
-        }
-        
         expenseView.snp.makeConstraints { make in
-            make.top.equalTo(leftMoneyLabel.snp.bottom).offset(30)
+            make.top.equalTo(stackView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview().inset(10)
             make.height.equalTo(140)
             make.bottom.equalToSuperview().inset(10)
@@ -137,9 +124,8 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
         delegate?.rightButtonTapped()
     }
     
-    func configure(with date: String, leftMoney: String, monthBudget: Int, leftBudget: Int, currency: String) {
+    func configure(with date: String, monthBudget: Int, leftBudget: Int, currency: String) {
         monthButton.setTitle(date, for: .normal)
-        leftMoneyLabel.text = leftMoney
         expenseView.configure(leftBudget: leftBudget, monthBudget: monthBudget, currency: currency)
     }
 }

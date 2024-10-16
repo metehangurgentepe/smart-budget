@@ -13,7 +13,7 @@ struct User: Codable{
     var salary: Int?
 }
 
-enum Currency: String, Codable {
+enum Currency: String, Codable, CaseIterable {
     case dolar = "$"
     case euro = "€"
     case turkish = "₺"
@@ -71,6 +71,4 @@ enum Currency: String, Codable {
         case .dinar: return "dinar"
         }
     }
-    
-    static var allCases: [Currency] = [.dolar, .euro, .dinar, .franc, .krona, .peso, .pound, .real, .rupee, .turkish, .won, .yen]
 }
