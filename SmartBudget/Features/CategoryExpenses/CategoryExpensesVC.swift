@@ -69,7 +69,7 @@ class CategoryExpensesViewController: UIViewController, UIGestureRecognizerDeleg
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(headerView.snp.bottom).offset(20)
+            make.top.equalTo(headerView.snp.bottom)
             make.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AccumulateVC: DataLoadingVC, AddAccumulateDelegate {
+class AccumulateVC: DataLoadingVC, AddAccumulateDelegate, UIGestureRecognizerDelegate {
     var viewModel = AccumulateViewModel()
     var accumulate: [Accumulate] = []
     var tableView: UITableView = {
@@ -16,40 +16,92 @@ class AccumulateVC: DataLoadingVC, AddAccumulateDelegate {
         return table
     }()
     
+    lazy var headerView: UIView = {
+        let title = UILabel()
+        title.font = UIFont.preferredFont(forTextStyle: .largeTitle).withSize(30)
+        title.text = "Savings"
+        
+        let date = UILabel()
+        date.font = UIFont.preferredFont(forTextStyle: .headline)
+        date.text = currentDate?.toFormattedDateString()?.uppercased()
+        
+        let sv = UIStackView(arrangedSubviews: [title,date])
+        sv.axis = .vertical
+        sv.spacing = 10
+        sv.alignment = .leading
+        return sv
+    }()
+    
+    var currentDate: String?
+    
+    init(date: String) {
+        self.currentDate = date
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         viewModel.delegate = self
         view.backgroundColor = .systemBackground
-        title = "Accumulates"
         configureDesign()
         
         Task{
-            let date = Date()
-            let formattedDate = date.formatToMonthYear()
-            viewModel.getAccumulate(date: formattedDate)
+            viewModel.getAccumulate(date: currentDate ?? Date().formatToMonthYear())
         }
     }
     
     func didAddAccumulate() {
         Task{
-            let date = Date()
-            let formattedDate = date.formatToMonthYear()
-            viewModel.getAccumulate(date: formattedDate)
+            viewModel.getAccumulate(date: currentDate ?? Date().formatToMonthYear())
         }
         tableView.reloadData()
     }
     
     
     private func configureDesign() {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
+        tableView.backgroundColor = .secondarySystemBackground
+        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"), style: .plain, target: self, action: #selector(backButtonTapped))
+        backButton.tintColor = .customGray
+        navigationItem.leftBarButtonItem = backButton
+        
         configureTableView()
         configurePlusButton()
+        setupHeader()
+    }
+    
+    private func setupHeader() {
+        let bgView = UIView()
+        bgView.backgroundColor = .systemBackground
+        
+        view.addSubview(headerView)
+        view.addSubview(bgView)
+        
+        headerView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.lessThanOrEqualTo(100)
+        }
+        
+        bgView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(headerView.snp.bottom)
+        }
+        view.bringSubviewToFront(headerView)
     }
     
     
     private func configurePlusButton() {
         let image = UIImage(systemName: "plus.circle.fill")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(tappedPlusButton))
+        let button = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(tappedPlusButton))
+        button.tintColor = .customOrange
+        navigationItem.rightBarButtonItem = button
     }
     
     
@@ -74,6 +126,10 @@ class AccumulateVC: DataLoadingVC, AddAccumulateDelegate {
         addAccumulateVC.modalPresentationStyle = .overFullScreen
         addAccumulateVC.modalTransitionStyle = .crossDissolve
         present(addAccumulateVC, animated: true, completion: nil)
+    }
+    
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
 

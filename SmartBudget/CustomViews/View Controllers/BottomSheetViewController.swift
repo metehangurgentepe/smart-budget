@@ -22,8 +22,8 @@ class BottomSheetViewController: UIViewController {
     private func setupViews() {
         view.backgroundColor = .clear
         
-        let blurEffect = UIBlurEffect(style: .systemMaterialDark)
-        let blurView = UIVisualEffectView(effect: blurEffect)
+        let blurView = UIView()
+        blurView.backgroundColor = .black.withAlphaComponent(0.3)
         view.addSubview(blurView)
         blurView.frame = view.bounds
         

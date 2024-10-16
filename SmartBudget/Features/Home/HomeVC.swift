@@ -13,7 +13,6 @@ protocol MonthButtonDelegate: AnyObject {
 }
 
 class HomeVC: DataLoadingVC, AddExpenseDelegate, HeaderViewDelegate {
-    
     enum Section {
         case main
     }
@@ -83,8 +82,7 @@ class HomeVC: DataLoadingVC, AddExpenseDelegate, HeaderViewDelegate {
         case left
         case right
     }
-    
-    
+        
     weak var delegate: MonthButtonDelegate?
     
     // MARK: - Lifecycle Methods
@@ -121,7 +119,7 @@ class HomeVC: DataLoadingVC, AddExpenseDelegate, HeaderViewDelegate {
     private func configureCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.headerReferenceSize = CGSize(width: view.bounds.width, height: 200)
+        layout.headerReferenceSize = CGSize(width: view.bounds.width, height: 170)
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         collectionView.showsVerticalScrollIndicator = false
@@ -313,6 +311,11 @@ class HomeVC: DataLoadingVC, AddExpenseDelegate, HeaderViewDelegate {
         
     }
     
+    func navigateToAccumulateVC() {
+        let vc = AccumulateVC(date: currentDate.formatToMonthYear())
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     private func calculateTotalExpenses() -> Int {
         let totalExpenses = expenses.reduce(0) { $0 + $1.price }
         return totalExpenses
@@ -407,12 +410,6 @@ extension HomeVC: HomeViewModelDelegate {
             case .emptyList:
                 self.expenses.removeAll()
                 self.updateSnapshot()
-                
-            case .showUser(let user):
-                break
-                
-            case .reloadCollectionView(_):
-                break
                 
             case .getBudget(let budget):
                 self.currency = budget.currency

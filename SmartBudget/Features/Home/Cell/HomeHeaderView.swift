@@ -12,6 +12,7 @@ protocol HeaderViewDelegate: AnyObject {
     func headerView(_ headerView: HeaderView, didSelectDate date: String)
     func rightButtonTapped()
     func leftButtonTapped()
+    func navigateToAccumulateVC()
 }
 
 class HeaderView: UICollectionReusableView, MonthButtonDelegate {
@@ -72,6 +73,9 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
     }
     
     private func setupViews() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(navigateAccumulate))
+        expenseView.addGestureRecognizer(tapGesture)
+        
         addSubview(expenseView)
         addSubview(stackView)
         
@@ -109,6 +113,11 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
     func selectedMonth(_ date: String) {
         monthButton.setTitle("\(date)", for: .normal)
     }
+
+    func configure(with date: String, monthBudget: Int, leftBudget: Int, currency: String) {
+        monthButton.setTitle(date, for: .normal)
+        expenseView.configure(leftBudget: leftBudget, monthBudget: monthBudget, currency: currency)
+    }
     
     @objc private func monthButtonTapped() {
         let date = Date()
@@ -124,8 +133,7 @@ class HeaderView: UICollectionReusableView, MonthButtonDelegate {
         delegate?.rightButtonTapped()
     }
     
-    func configure(with date: String, monthBudget: Int, leftBudget: Int, currency: String) {
-        monthButton.setTitle(date, for: .normal)
-        expenseView.configure(leftBudget: leftBudget, monthBudget: monthBudget, currency: currency)
+    @objc func navigateAccumulate() {
+        delegate?.navigateToAccumulateVC()
     }
 }

@@ -291,6 +291,7 @@
 		660C146F2B9CC77D004622D2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				668ECE9B2CBFE9D40055179C /* Onboarding */,
 				668ECE8B2CBF19630055179C /* CategoryExpenses */,
 				669256A62C3429AC00E4DA67 /* Account */,
 				660887D92BF2457300297F5D /* AddAccumulate */,
@@ -547,6 +548,13 @@
 				668ECE8C2CBF19720055179C /* CategoryExpensesVC.swift */,
 			);
 			path = CategoryExpenses;
+			sourceTree = "<group>";
+		};
+		668ECE9B2CBFE9D40055179C /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		669256A62C3429AC00E4DA67 /* Account */ = {

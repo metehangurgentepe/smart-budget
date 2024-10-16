@@ -331,7 +331,7 @@ class AddExpenseVC: DataLoadingVC, SelectCategoryViewDelegate, UITextFieldDelega
            let datePicker = bottomSheet.contentView.subviews.first as? UIDatePicker {
             let dateString = formatter.string(from: datePicker.date)
             selectedDate = datePicker.date
-            cells[2] = ExpenseCellRow(icon: "calendar", title: dateString, iconColor: .clear)
+            cells[2] = ExpenseCellRow(icon: "calendar", title: dateString, iconColor: .customGray)
             tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .automatic)
             bottomSheet.dismissBottomSheet()
         }

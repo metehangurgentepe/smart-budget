@@ -17,7 +17,7 @@ class ExpenseNoteCell: UITableViewCell, UITextFieldDelegate {
     let icon: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "arrow.down.circle.fill")
-        imageView.tintColor = .label.withAlphaComponent(0.8)
+        imageView.tintColor = .customGray
         imageView.image = UIImage(systemName: "note.text")
         return imageView
     }()

@@ -25,8 +25,6 @@ enum ExpenseListViewModelOutput: Equatable {
     case showExpenseList([Expense])
     case showError(SBError)
     case emptyList
-    case reloadCollectionView([Expense])
-    case showUser(User?)
     case getBudget(Budget)
 }
 

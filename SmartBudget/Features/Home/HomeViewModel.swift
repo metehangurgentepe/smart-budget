@@ -40,22 +40,6 @@ class HomeViewModel: HomeViewModelProtocol{
         }
     }
     
-    func getUserMonthlyBudget() {
-        delegate?.handleViewModelOutput(.setLoading(true))
-        
-        Task{ [weak self] in
-            guard let self = self else { return }
-            do {
-                self.user = try await UserManager.shared.getUser()
-                self.delegate?.handleViewModelOutput(.showUser(user))
-                self.delegate?.handleViewModelOutput(.setLoading(false))
-            } catch {
-                self.delegate?.handleViewModelOutput(.showError(error as! SBError))
-                self.delegate?.handleViewModelOutput(.setLoading(false))
-            }
-        }
-    }
-    
     func fetchCurrentBudget(date: Date) {
         Task {
             do {
